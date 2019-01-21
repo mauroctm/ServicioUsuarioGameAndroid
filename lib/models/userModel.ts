@@ -5,18 +5,25 @@ const Schema = mongoose.Schema;
 export const User = new Schema({
     username: {
         type: String,
-        required: 'Enter a first name'
+        required: true,
+        unique: true,
     },
     email: {
-        type: String
+        type: String,
+        unique: true,
+        required: true,
     },
     password: {
         type: String,
-        required: 'Enter a first name'
+        required: true
     },
-
+    status: {
+        type: Boolean,
+        default: true
+    },
     created_date: {
         type: Date,
         default: Date.now
-    }
+    },
+    role: { type: String, enum: ['manager', 'gamer', 'administrador'], default: 'gamer', required: true }
 });

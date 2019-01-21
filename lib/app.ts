@@ -2,7 +2,7 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import { Routes } from "./routes/Routes";
 import * as mongoose from "mongoose";
-import { SecurityModule } from "../config/config";
+import { SecurityModule } from "./config/SecurityConfig";
 
 class App {
     private security = new SecurityModule();
@@ -42,10 +42,7 @@ class App {
 
     private mongoSetup(): void {
         mongoose.Promise = global.Promise;
-        mongoose.connect(this.mongoUrl, {
-            useCreateIndex: true,
-            useNewUrlParser: true
-        });
+        mongoose.connect(this.mongoUrl, {});
     }
 
 }

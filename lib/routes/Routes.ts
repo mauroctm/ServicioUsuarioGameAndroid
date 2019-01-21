@@ -1,9 +1,9 @@
 import {Request, Response, NextFunction} from "express";
-import { ContactController } from "../controllers/crmController";
+import { AuthController } from "../controllers/AuthController";
 
 export class Routes { 
     
-    public contactController: ContactController = new ContactController() 
+    public authController: AuthController = new AuthController() 
     
     public routes(app): void {   
         
@@ -12,30 +12,26 @@ export class Routes {
             res.status(200).send({
                 message: 'GET request successfulll!!!!'
             })
-        })
-        
-        // Contact 
-        app.route('/contact')
-        .get((req: Request, res: Response, next: NextFunction) => {
-            // middleware
-            console.log(`Request from: ${req.originalUrl}`);
-            console.log(`Request type: ${req.method}`);            
-            if(req.query.key !== '78942ef2c1c98bf10fca09c808d718fa3734703e'){
-                res.status(401).send('You shall not pass!');
-            } else {
-                next();
-            }                        
-        }, this.contactController.getContacts)        
+        });
 
-        // POST endpoint
-        .post(this.contactController.addNewContact);
+        app.post('/api/user', (req: Request, res: Response) => {
+            this.authController.createUser(req,res);
+        });
 
-        // Contact detail
-        app.route('/contact/:contactId')
-        // get specific contact
-        .get(this.contactController.getContactWithID)
-        .put(this.contactController.updateContact)
-        .delete(this.contactController.deleteContact)
+        app.get('/api/user', (req: Request, res: Response) => {
+            this.authController.decodeToken(req,res);
+        });
 
+        app.post('/api/login', (req: Request, res: Response) => {
+            this.authController.login(req,res);
+        });
+
+        app.get('/api/logout', (req: Request, res: Response) => {
+            this.authController.logout(req,res);
+        });
+
+        app.put('/api/user', (req: Request, res: Response) => {
+            this.authController.updateUser(req,res);
+        });
     }
 }
